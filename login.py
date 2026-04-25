@@ -1,20 +1,19 @@
 import streamlit as st
 import time
 
-# Page Config
-st.set_page_config(page_title="Tasnim Ahmad | Portal", page_icon="❄️", layout="centered")
+# Page Configuration
+st.set_page_config(page_title="Tasnim Ahmad | Portal", page_icon="🔐")
 
-# Professional Aesthetic Glassmorphism UI
+# Aesthetic Glassmorphism UI with Pop Animation
 st.markdown("""
     <style>
-    /* Animated Gradient Background */
+    /* Background Animation */
     .stApp {
         background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #1e1b4b);
         background-size: 400% 400%;
         animation: gradient 15s ease infinite;
         color: #f8fafc;
     }
-
     @keyframes gradient {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
@@ -25,7 +24,6 @@ st.markdown("""
     .glass-card {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 24px;
         padding: 50px;
@@ -33,12 +31,16 @@ st.markdown("""
         text-align: center;
     }
 
-    /* Input Styling */
-    .stTextInput input {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        color: white !important;
-        border-radius: 12px !important;
+    /* Bold Gradient Name */
+    .my-name {
+        font-size: 55px;
+        font-weight: 900;
+        background: linear-gradient(90deg, #00f2fe, #7ef1ff, #ff00cc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+        text-shadow: 0px 10px 20px rgba(0,0,0,0.2);
     }
 
     /* Button Styling */
@@ -49,87 +51,91 @@ st.markdown("""
         border: 1px solid rgba(255, 255, 255, 0.2);
         padding: 12px;
         border-radius: 12px;
-        font-weight: 600;
-        letter-spacing: 1px;
-        transition: all 0.3s ease;
+        font-weight: 700;
+        transition: 0.3s;
     }
-
     .stButton>button:hover {
         background: rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        transform: scale(1.02);
+        box-shadow: 0px 0px 15px rgba(255,255,255,0.2);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Session State Persistence
+# Session State
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
-if 'attempts' not in st.session_state:
-    st.session_state.attempts = 0
 
 def login():
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
-    st.markdown("<h1 style='font-weight: 200; letter-spacing: 2px;'>TASNIM AHMAD</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='font-size: 14px; opacity: 0.6; margin-bottom: 30px;'>SECURE ACCESS TERMINAL</p>", unsafe_allow_html=True)
+    st.markdown('<h1 class="my-name">TASNIM AHMAD</h1>', unsafe_allow_html=True)
+    st.markdown("<p style='opacity: 0.5; font-size: 14px;'>SECURE SYSTEM AUTHENTICATION</p>", unsafe_allow_html=True)
     
-    u = st.text_input("IDENTITY", placeholder="Admin ID")
-    p = st.text_input("ACCESS KEY", type="password", placeholder="••••••••")
+    u = st.text_input("Username", placeholder="Enter your ID")
+    p = st.text_input("Password", type="password", placeholder="Enter security key")
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    if st.button("INITIALIZE"):
+    if st.button("Login"):
         if u == "admin" and p == "1234":
             st.session_state.logged_in = True
             st.rerun()
         else:
-            st.session_state.attempts += 1
-            left = 3 - st.session_state.attempts
-            if left > 0:
-                st.toast(f"Access Denied. {left} attempts remaining.", icon="⚠️")
-            else:
-                st.error("System Override: Terminal Locked.")
-                st.stop()
+            st.error("Access Denied: Invalid credentials.")
+
     st.markdown('</div>', unsafe_allow_html=True)
 
-def workspace():
-    st.markdown("<h2 style='text-align: center; font-weight: 200;'>ACCESS GRANTED</h2>", unsafe_allow_html=True)
+def dashboard():
+    st.markdown("<h3 style='text-align: center; opacity: 0.7;'>WORKSPACE ACTIVATED</h3>", unsafe_allow_html=True)
     
-    name = st.text_input("ENTER USERNAME TO ACTIVATE:", placeholder="Waiting for input...")
+    name = st.text_input("Input your name:", placeholder="Type here and press Enter")
 
     if name:
-        # Visual Effects
-        st.balloons()
-        st.snow()
-        
-        # Minimalist Transparent Greeting Card
+        # Quick Burst Effect using HTML/JS (1 second pop)
+        st.components.v1.html("""
+            <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+            <script>
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#00f2fe', '#ff00cc', '#ffffff', '#7ef1ff']
+                });
+            </script>
+        """, height=0)
+
+        # Greeting Card
         st.markdown(f"""
             <div style="
                 background: rgba(255, 255, 255, 0.05);
                 padding: 60px;
                 border-radius: 30px;
-                border: 1px solid rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(0, 242, 254, 0.2);
                 text-align: center;
                 margin-top: 40px;
+                animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             ">
-                <p style='letter-spacing: 3px; opacity: 0.5;'>WELCOME BACK</p>
-                <h1 style="font-size: 60px; font-weight: 100; margin: 10px 0;">{name.upper()}</h1>
-                <div style="width: 50px; hieght: 2px; background: white; margin: 20px auto; opacity: 0.2;"></div>
-                <p style="font-style: italic; opacity: 0.7;">Dashboard synchronization in progress...</p>
+                <h1 style="font-size: 50px; font-weight: 100; color: #00f2fe; margin-bottom: 10px;">Hello, {name}!</h1>
+                <p style="font-size: 20px; font-weight: 300; opacity: 0.9;">
+                    You are looking exceptionally amazing today! ✨
+                </p>
             </div>
+            <style>
+                @keyframes pop {
+                    0% { transform: scale(0.8); opacity: 0; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+            </style>
         """, unsafe_allow_html=True)
 
-        with st.spinner('Syncing...'):
-            time.sleep(5)
-            st.toast(f"Workspace Ready: {name}", icon="✔️")
+        # Success toast
+        st.toast(f"Welcome back, {name}", icon="⚡")
 
-    if st.sidebar.button("DISCONNECT"):
+    if st.sidebar.button("Logout"):
         st.session_state.logged_in = False
-        st.session_state.attempts = 0
         st.rerun()
 
-# Logic Gate
+# Execution
 if st.session_state.logged_in:
-    workspace()
+    dashboard()
 else:
     login()
