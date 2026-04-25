@@ -63,7 +63,39 @@ st.markdown("""
         background-color: #FFFFFF;
         box-shadow: 2px 0 5px rgba(0,0,0,0.05);
     }
+<st.markdown("""
+<style>
+    /* ১. পুরো পেজের ব্যাকগ্রাউন্ড সাদা করা */
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
+        background-color: white !important;
+    }
+
+    /* ২. সাইডবার সাদা করা */
+    [data-testid="stSidebar"] {
+        background-color: #f0f2f6 !important;
+    }
+
+    /* ৩. সব লেখার কালার কালো/ডার্ক করা (যাতে সাদার ওপর দেখা যায়) */
+    h1, h2, h3, p, span, label, .stMarkdown {
+        color: #1E293B !important;
+    }
+
+    /* ৪. ইনপুট বক্সের ভেতরকার লেখা ঠিক করা */
+    input {
+        color: black !important;
+    }
+
+    /* ৫. আপনার লগইন হেডার আগের মতোই কালারফুল থাকবে */
+    .login-header {
+        text-align: center;
+        background: -webkit-linear-gradient(#E65100, #FF9800);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 45px;
+        font-weight: 800;
+    }
 </style>
+""", unsafe_allow_html=True)>
 """, unsafe_allow_html=True)
 
 # --- Session State Initialization ---
