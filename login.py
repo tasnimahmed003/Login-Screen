@@ -17,6 +17,7 @@ st.markdown("""
         background-color: #E65100;
         color: white;
         border: none;
+        font-size: 20px;
     }
     .stButton>button:hover {
         background-color: #BF360C;
@@ -27,11 +28,6 @@ st.markdown("""
         color: #E65100;
         font-size: 40px;
         font-weight: bold;
-    }
-    .calc-btn {
-        height: 60px !important;
-        font-size: 20px !important;
-        margin: 2px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -45,6 +41,28 @@ if 'account_locked' not in st.session_state:
     st.session_state['account_locked'] = False
 if 'calc_expression' not in st.session_state:
     st.session_state['calc_expression'] = ""
+
+# --- Calculator Callback Function ---
+# এই ফাংশনটি ক্যালকুলেটরের বাটন চাপলে কাজ করবে
+def update_calc(val):
+    current_expr = st.session_state['calc_expression']
+    
+    if val == 'C':
+        st.session_state['calc_expression'] = ""
+    elif val == '=':
+        try:
+            # eval() দিয়ে হিসাব করা হচ্ছে
+            result = str(eval(current_expr))
+            st.session_state['calc_expression'] = result
+        except:
+            st.session_state['calc_expression'] = "Error"
+    else:
+        # যদি আগে Error থাকে, তবে নতুন সংখ্যা চাপলে Error মুছে যাবে
+        if current_expr == "Error":
+            st.session_state['calc_expression'] = val
+        else:
+            st.session_state['calc_expression'] += val
+
 
 # --- Login Logic ---
 if not st.session_state['logged_in']:
@@ -74,7 +92,7 @@ if not st.session_state['logged_in']:
 
 # --- Dashboard Logic ---
 else:
-    # Sidebar for Professional Navigation (3-line menu style)
+    # Sidebar Navigation
     st.sidebar.title("Navigation")
     page = st.sidebar.radio("Go to:", ["Home", "Calculator", "Rock Paper Scissors"])
     
@@ -82,7 +100,7 @@ else:
         st.session_state['logged_in'] = False
         st.rerun()
 
-    # 1. Home Page (Greetings)
+    # 1. Home Page 
     if page == "Home":
         st.title("User Dashboard")
         st.write("Welcome to the management system.")
@@ -95,12 +113,12 @@ else:
             else:
                 st.info("Please provide a name to receive a greeting.")
 
-    # 2. Mobile-Style Calculator
+    # 2. Updated Calculator Page
     elif page == "Calculator":
         st.title("Calculator")
         st.write("Calculation Tool")
         
-        # Display Screen
+        # Display Screen (Disabled so user can't type directly)
         st.text_input("Screen", value=st.session_state['calc_expression'], key="display", disabled=True)
         
         # Calculator Buttons Grid
@@ -111,20 +129,16 @@ else:
             ['C', '0', '=', '+']
         ]
         
+        # বাটন তৈরি করা হচ্ছে এবং on_click ফাংশন অ্যাড করা হচ্ছে
         for row in btns:
             cols = st.columns(4)
             for i, char in enumerate(row):
-                if cols[i].button(char, key=f"btn_{char}"):
-                    if char == 'C':
-                        st.session_state['calc_expression'] = ""
-                    elif char == '=':
-                        try:
-                            st.session_state['calc_expression'] = str(eval(st.session_state['calc_expression']))
-                        except:
-                            st.session_state['calc_expression'] = "Error"
-                    else:
-                        st.session_state['calc_expression'] += char
-                    st.rerun()
+                cols[i].button(
+                    char, 
+                    key=f"btn_{char}", 
+                    on_click=update_calc, 
+                    args=(char,) # বাটন চাপলে কোন ক্যারেক্টারটি যাবে তা নির্ধারণ করা
+                )
 
     # 3. Rock Paper Scissors Game
     elif page == "Rock Paper Scissors":
@@ -135,14 +149,14 @@ else:
         if st.button("Play"):
             options = ["Rock", "Paper", "Scissors"]
             computer_choice = random.choice(options)
-            st.write(f"You chose: {user_choice}")
-            st.write(f"Computer chose: {computer_choice}")
+            st.write(f"**You chose:** {user_choice}")
+            st.write(f"**Computer chose:** {computer_choice}")
             
             if user_choice == computer_choice:
                 st.info("It is a Tie!")
             elif (user_choice == "Rock" and computer_choice == "Scissors") or \
                  (user_choice == "Paper" and computer_choice == "Rock") or \
                  (user_choice == "Scissors" and computer_choice == "Paper"):
-                st.success("Result: You Win!")
+                st.success("Result: You Win! 🎉")
             else:
-                st.error("Result: Computer Wins!")
+                st.error("Result: Computer Wins! 💻")
