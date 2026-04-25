@@ -91,40 +91,17 @@ else:
         name_input = st.text_input("Enter your name")
         if st.button("Enter"):
             if name_input:
-                st.success(f"Welcome, {name_input}! You are looking very professional and impressive today. Have a productive session.")
+                st.success(f"Welcome, {name_input}! You are looking exceptionally amazing today! ✨
+Take care of yourself 🤍")
             else:
                 st.info("Please provide a name to receive a greeting.")
 
-    # 2. Mobile-Style Calculator
-    elif page == "Calculator":
-        st.title("Calculator")
-        st.write("Professional Calculation Tool")
         
         # Display Screen
         st.text_input("Screen", value=st.session_state['calc_expression'], key="display", disabled=True)
         
         # Calculator Buttons Grid
-        btns = [
-            ['7', '8', '9', '/'],
-            ['4', '5', '6', '*'],
-            ['1', '2', '3', '-'],
-            ['C', '0', '=', '+']
-        ]
-        
-        for row in btns:
-            cols = st.columns(4)
-            for i, char in enumerate(row):
-                if cols[i].button(char, key=f"btn_{char}"):
-                    if char == 'C':
-                        st.session_state['calc_expression'] = ""
-                    elif char == '=':
-                        try:
-                            st.session_state['calc_expression'] = str(eval(st.session_state['calc_expression']))
-                        except:
-                            st.session_state['calc_expression'] = "Error"
-                    else:
-                        st.session_state['calc_expression'] += char
-                    st.rerun()
+       
 
     # 3. Rock Paper Scissors Game
     elif page == "Rock Paper Scissors":
