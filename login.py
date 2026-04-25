@@ -2,32 +2,66 @@ import streamlit as st
 import random
 
 # --- Page Configuration ---
-st.set_page_config(page_title="Tasnim Ahmad - Project", layout="wide")
+st.set_page_config(page_title="Tasnim Ahmad - Project", page_icon="✨", layout="centered")
 
-# --- Custom CSS for Professional Look & Mobile-Style Calculator ---
+# --- Premium Custom CSS ---
 st.markdown("""
 <style>
-    .main {
-        background-color: #F0F2F6;
+    /* Background Color */
+    .stApp {
+        background-color: #F8FAFC;
     }
-    .stButton>button {
-        width: 100%;
-        border-radius: 5px;
-        height: 3em;
-        background-color: #E65100;
-        color: white;
-        border: none;
-        font-size: 20px;
-    }
-    .stButton>button:hover {
-        background-color: #BF360C;
-        color: white;
-    }
+    
+    /* Login Header Gradient Text */
     .login-header {
         text-align: center;
-        color: #E65100;
-        font-size: 40px;
+        background: -webkit-linear-gradient(#E65100, #FF9800);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 45px;
+        font-weight: 800;
+        margin-bottom: -10px;
+    }
+    .login-subheader {
+        text-align: center;
+        color: #64748B;
+        font-size: 18px;
+        margin-bottom: 30px;
+    }
+    
+    /* Button Styling */
+    .stButton>button {
+        width: 100%;
+        border-radius: 8px;
+        height: 2.5em;
+        background: linear-gradient(135deg, #E65100 0%, #FF9800 100%);
+        color: white;
+        border: none;
+        font-size: 18px;
         font-weight: bold;
+        box-shadow: 0 4px 6px rgba(230, 81, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+    .stButton>button:hover {
+        background: linear-gradient(135deg, #BF360C 0%, #E65100 100%);
+        box-shadow: 0 6px 10px rgba(230, 81, 0, 0.3);
+        transform: translateY(-2px);
+    }
+    
+    /* Input Fields Styling */
+    .stTextInput>div>div>input {
+        border-radius: 8px;
+        border: 1px solid #CBD5E1;
+        padding: 10px;
+    }
+    .stNumberInput>div>div>input {
+        border-radius: 8px;
+    }
+    
+    /* Sidebar Styling */
+    [data-testid="stSidebar"] {
+        background-color: #FFFFFF;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.05);
     }
 </style>
 """, unsafe_allow_html=True)
@@ -39,124 +73,131 @@ if 'login_attempts' not in st.session_state:
     st.session_state['login_attempts'] = 0
 if 'account_locked' not in st.session_state:
     st.session_state['account_locked'] = False
-if 'calc_expression' not in st.session_state:
-    st.session_state['calc_expression'] = ""
 
-# --- Calculator Callback Function ---
-# এই ফাংশনটি ক্যালকুলেটরের বাটন চাপলে কাজ করবে
-def update_calc(val):
-    current_expr = st.session_state['calc_expression']
-    
-    if val == 'C':
-        st.session_state['calc_expression'] = ""
-    elif val == '=':
-        try:
-            # eval() দিয়ে হিসাব করা হচ্ছে
-            result = str(eval(current_expr))
-            st.session_state['calc_expression'] = result
-        except:
-            st.session_state['calc_expression'] = "Error"
-    else:
-        # যদি আগে Error থাকে, তবে নতুন সংখ্যা চাপলে Error মুছে যাবে
-        if current_expr == "Error":
-            st.session_state['calc_expression'] = val
-        else:
-            st.session_state['calc_expression'] += val
-
-
-# --- Login Logic ---
+# ==========================================
+#              LOGIN PORTAL
+# ==========================================
 if not st.session_state['logged_in']:
     st.markdown("<div class='login-header'>Tasnim Ahmad</div>", unsafe_allow_html=True)
-    st.write("<p style='text-align: center;'>Login Portal</p>", unsafe_allow_html=True)
+    st.markdown("<div class='login-subheader'>Welcome back! Please login to your dashboard.</div>", unsafe_allow_html=True)
     
-    col1, col2, col3 = st.columns([1, 2, 1])
+    # লগইন ফর্ম মাঝখানে রাখার জন্য কলাম ব্যবহার
+    col1, col2, col3 = st.columns([1, 1.5, 1])
     with col2:
         if st.session_state['account_locked']:
-            st.error("Account Locked: Too many failed attempts. Please contact administrator.")
+            st.error("🔒 Account Locked: Too many failed attempts. Please contact administrator.")
         else:
-            username = st.text_input("Username")
-            password = st.text_input("Password", type="password")
-            
-            if st.button("Login"):
-                if username == "Tasnim" and password == "12345":
-                    st.session_state['logged_in'] = True
-                    st.rerun()
-                else:
-                    st.session_state['login_attempts'] += 1
-                    if st.session_state['login_attempts'] >= 3:
-                        st.session_state['account_locked'] = True
+            with st.container():
+                username = st.text_input("👤 Username", placeholder="Enter your username")
+                password = st.text_input("🔑 Password", type="password", placeholder="Enter your password")
+                
+                st.write("") # একটু ফাঁকা জায়গা তৈরির জন্য
+                if st.button("Secure Login"):
+                    if username == "Tasnim" and password == "12345":
+                        st.session_state['logged_in'] = True
                         st.rerun()
                     else:
-                        remaining = 3 - st.session_state['login_attempts']
-                        st.warning(f"Invalid credentials. {remaining} attempts remaining.")
+                        st.session_state['login_attempts'] += 1
+                        if st.session_state['login_attempts'] >= 3:
+                            st.session_state['account_locked'] = True
+                            st.rerun()
+                        else:
+                            remaining = 3 - st.session_state['login_attempts']
+                            st.warning(f"⚠️ Invalid credentials. {remaining} attempts remaining.")
 
-# --- Dashboard Logic ---
+# ==========================================
+#              MAIN DASHBOARD
+# ==========================================
 else:
-    # Sidebar Navigation
-    st.sidebar.title("Navigation")
-    page = st.sidebar.radio("Go to:", ["Home", "Calculator", "Rock Paper Scissors"])
+    # --- Sidebar Navigation ---
+    st.sidebar.markdown("<h2 style='text-align: center; color: #E65100;'>📌 Navigation</h2>", unsafe_allow_html=True)
+    page = st.sidebar.radio("", ["🏠 Home", "🧮 Calculator", "🎮 Rock Paper Scissors"])
     
-    if st.sidebar.button("Logout"):
+    st.sidebar.divider()
+    if st.sidebar.button("🚪 Logout"):
         st.session_state['logged_in'] = False
         st.rerun()
 
-    # 1. Home Page 
-    if page == "Home":
-        st.title("User Dashboard")
-        st.write("Welcome to the management system.")
+    # --- 1. Home Page ---
+    if page == "🏠 Home":
+        st.markdown("<h1 style='color: #334155;'>User Dashboard</h1>", unsafe_allow_html=True)
+        st.write("Welcome to the premium management system. Select an option from the sidebar to get started.")
         st.divider()
         
-        name_input = st.text_input("Enter your name")
-        if st.button("Enter"):
+        st.subheader("✨ Let's personalize your experience!")
+        name_input = st.text_input("Enter your beautiful name:")
+        if st.button("Say Hello"):
             if name_input:
-                st.success(f"Welcome, {name_input}! You are looking exceptionally amazing today! ✨ Take care of yourself 🤍")
+                st.success(f"🎉 Welcome, **{name_input}**! You are looking exceptionally amazing today! ✨ Take care of yourself 🤍")
+                st.balloons() # কিউট অ্যানিমেশন
             else:
-                st.info("Please provide a name to receive a greeting.")
+                st.info("Please provide a name above.")
 
-    # 2. Updated Calculator Page
-    elif page == "Calculator":
-        st.title("Calculator")
-        st.write("Calculation Tool")
+    # --- 2. Normal (Reliable) Calculator ---
+    elif page == "🧮 Calculator":
+        st.markdown("<h1 style='color: #334155;'>Smart Calculator</h1>", unsafe_allow_html=True)
+        st.write("সহজ, দ্রুত এবং নির্ভুল হিসাব করার টুল।")
+        st.markdown("""---""")
         
-        # Display Screen (Disabled so user can't type directly)
-        st.text_input("Screen", value=st.session_state['calc_expression'], key="display", disabled=True)
+        # পাশাপাশি ৩টি কলামে ইনপুট নেওয়ার ব্যবস্থা
+        calc_col1, calc_col2, calc_col3 = st.columns([2, 1, 2])
         
-        # Calculator Buttons Grid
-        btns = [
-            ['7', '8', '9', '/'],
-            ['4', '5', '6', '*'],
-            ['1', '2', '3', '-'],
-            ['C', '0', '=', '+']
-        ]
-        
-        # বাটন তৈরি করা হচ্ছে এবং on_click ফাংশন অ্যাড করা হচ্ছে
-        for row in btns:
-            cols = st.columns(4)
-            for i, char in enumerate(row):
-                cols[i].button(
-                    char, 
-                    key=f"btn_{char}", 
-                    on_click=update_calc, 
-                    args=(char,) # বাটন চাপলে কোন ক্যারেক্টারটি যাবে তা নির্ধারণ করা
-                )
-
-    # 3. Rock Paper Scissors Game
-    elif page == "Rock Paper Scissors":
-        st.title("Rock Paper Scissors")
-        st.write("Choose your move to play against the computer.")
-        
-        user_choice = st.selectbox("Select Choice", ["Rock", "Paper", "Scissors"])
-        if st.button("Play"):
-            options = ["Rock", "Paper", "Scissors"]
-            computer_choice = random.choice(options)
-            st.write(f"**You chose:** {user_choice}")
-            st.write(f"**Computer chose:** {computer_choice}")
+        with calc_col1:
+            num1 = st.number_input("First Number", value=0.0, step=1.0)
             
-            if user_choice == computer_choice:
-                st.info("It is a Tie!")
-            elif (user_choice == "Rock" and computer_choice == "Scissors") or \
-                 (user_choice == "Paper" and computer_choice == "Rock") or \
-                 (user_choice == "Scissors" and computer_choice == "Paper"):
-                st.success("Result: You Win! 🎉")
+        with calc_col2:
+            operator = st.selectbox("Operator", ["+", "-", "×", "÷"])
+            
+        with calc_col3:
+            num2 = st.number_input("Second Number", value=0.0, step=1.0)
+            
+        st.write("")
+        if st.button("Calculate Result"):
+            if operator == "+":
+                result = num1 + num2
+            elif operator == "-":
+                result = num1 - num2
+            elif operator == "×":
+                result = num1 * num2
+            elif operator == "÷":
+                if num2 == 0:
+                    result = "Error: Cannot divide by zero!"
+                else:
+                    result = num1 / num2
+            
+            # ফলাফল দেখানো
+            if isinstance(result, str):
+                st.error(result)
             else:
-                st.error("Result: Computer Wins! 💻")
+                st.success(f"**Result:** {num1} {operator} {num2} = **{result}**")
+
+    # --- 3. Rock Paper Scissors Game ---
+    elif page == "🎮 Rock Paper Scissors":
+        st.markdown("<h1 style='color: #334155;'>Rock Paper Scissors</h1>", unsafe_allow_html=True)
+        st.write("Can you beat the computer? Try your luck!")
+        st.markdown("""---""")
+        
+        col_game1, col_game2 = st.columns(2)
+        with col_game1:
+            user_choice = st.radio("Select your move:", ["🪨 Rock", "📄 Paper", "✂️ Scissors"])
+            
+        with col_game2:
+            st.write("")
+            st.write("")
+            if st.button("🎮 Play Now"):
+                options = ["🪨 Rock", "📄 Paper", "✂️ Scissors"]
+                computer_choice = random.choice(options)
+                
+                st.markdown(f"**You chose:** {user_choice}")
+                st.markdown(f"**Computer chose:** {computer_choice}")
+                
+                # লজিক
+                if user_choice == computer_choice:
+                    st.info("🤝 It is a Tie!")
+                elif (user_choice == "🪨 Rock" and computer_choice == "✂️ Scissors") or \
+                     (user_choice == "📄 Paper" and computer_choice == "🪨 Rock") or \
+                     (user_choice == "✂️ Scissors" and computer_choice == "📄 Paper"):
+                    st.success("🎉 Awesome! You Win!")
+                    st.balloons()
+                else:
+                    st.error("💻 Computer Wins! Better luck next time.")
