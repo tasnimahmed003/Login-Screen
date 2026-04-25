@@ -91,8 +91,7 @@ else:
         name_input = st.text_input("Enter your name")
         if st.button("Enter"):
             if name_input:
-                st.success(f"Welcome, {name_input}! You are looking exceptionally amazing today! ✨
-Take care of yourself 🤍")
+                st.success(f"Welcome, {name_input}! You are looking exceptionally amazing today! ✨ Take care of yourself 🤍")
             else:
                 st.info("Please provide a name to receive a greeting.")
 
