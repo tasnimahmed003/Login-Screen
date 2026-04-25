@@ -49,7 +49,7 @@ if 'calc_expression' not in st.session_state:
 # --- Login Logic ---
 if not st.session_state['logged_in']:
     st.markdown("<div class='login-header'>Tasnim Ahmad</div>", unsafe_allow_html=True)
-    st.write("<p style='text-align: center;'>Professional Login Portal</p>", unsafe_allow_html=True)
+    st.write("<p style='text-align: center;'>Login Portal</p>", unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -85,7 +85,7 @@ else:
     # 1. Home Page (Greetings)
     if page == "Home":
         st.title("User Dashboard")
-        st.write("Welcome to the professional management system.")
+        st.write("Welcome to the management system.")
         st.divider()
         
         name_input = st.text_input("Enter your name")
@@ -98,7 +98,7 @@ else:
     # 2. Mobile-Style Calculator
     elif page == "Calculator":
         st.title("Calculator")
-        st.write("Professional Calculation Tool")
+        st.write("Calculation Tool")
         
         # Display Screen
         st.text_input("Screen", value=st.session_state['calc_expression'], key="display", disabled=True)
