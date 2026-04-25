@@ -5,9 +5,10 @@ import time
 # Page Configuration
 st.set_page_config(page_title="Tasnim Ahmad | Portal", page_icon="🔐")
 
-# Aesthetic Glassmorphism UI
+# Aesthetic Glassmorphism UI with Orange Highlight
 st.markdown("""
     <style>
+    /* Background Animation */
     .stApp {
         background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #1e1b4b);
         background-size: 400% 400%;
@@ -19,6 +20,8 @@ st.markdown("""
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
+
+    /* Glassmorphism Card */
     .glass-card {
         background: rgba(255, 255, 255, 0.03);
         backdrop-filter: blur(20px);
@@ -28,6 +31,8 @@ st.markdown("""
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         text-align: center;
     }
+
+    /* Bold Gradient Name */
     .my-name {
         font-size: 55px;
         font-weight: 900;
@@ -36,6 +41,8 @@ st.markdown("""
         -webkit-text-fill-color: transparent;
         letter-spacing: 2px;
     }
+
+    /* Login Button Styling */
     .stButton>button {
         width: 100%;
         background: rgba(255, 255, 255, 0.1);
@@ -44,6 +51,32 @@ st.markdown("""
         padding: 12px;
         border-radius: 12px;
         font-weight: 700;
+        transition: 0.3s;
+    }
+    .stButton>button:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Highlighted Orange Input for Name */
+    .orange-highlight input {
+        border: 2px solid #ff7b00 !important;
+        box-shadow: 0 0 15px rgba(255, 123, 0, 0.4) !important;
+        background: rgba(255, 123, 0, 0.05) !important;
+        color: white !important;
+        border-radius: 15px !important;
+    }
+
+    /* Pulse effect for the Orange Guide */
+    .apply-hint {
+        color: #ff7b00;
+        font-weight: bold;
+        font-size: 14px;
+        animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+        0% { opacity: 0.5; }
+        50% { opacity: 1; }
+        100% { opacity: 0.5; }
     }
     </style>
 """, unsafe_allow_html=True)
@@ -71,10 +104,17 @@ def login():
 
 def dashboard():
     st.markdown("<h3 style='text-align: center; opacity: 0.7;'>WORKSPACE ACTIVATED</h3>", unsafe_allow_html=True)
-    name = st.text_input("Input your name:", placeholder="Type here and press Enter")
+    
+    # Highlighting the name input section
+    st.markdown('<p class="apply-hint">⚡ PRESS ENTER TO APPLY AFTER TYPING</p>', unsafe_allow_html=True)
+    
+    # Custom class for orange highlight
+    st.markdown('<div class="orange-highlight">', unsafe_allow_html=True)
+    name = st.text_input("Input your name:", placeholder="Type your name here...")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     if name:
-        # 1-Second Confetti Pop using JavaScript Component
+        # Instant Burst (1s Pop)
         components.html("""
             <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
             <script>
@@ -82,14 +122,14 @@ def dashboard():
                     particleCount: 200,
                     spread: 100,
                     origin: { y: 0.6 },
-                    colors: ['#00f2fe', '#ff00cc', '#ffffff']
+                    colors: ['#ff7b00', '#00f2fe', '#ffffff']
                 });
             </script>
         """, height=0)
 
         st.markdown(f"""
-            <div style="background: rgba(255, 255, 255, 0.05); padding: 50px; border-radius: 30px; text-align: center; border: 1px solid rgba(0, 242, 254, 0.2); margin-top: 40px;">
-                <h1 style="font-size: 45px; color: #00f2fe;">Hello, {name}!</h1>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 50px; border-radius: 30px; text-align: center; border: 1px solid #ff7b00; margin-top: 40px;">
+                <h1 style="font-size: 45px; color: #ff7b00;">Hello, {name}!</h1>
                 <p style="font-size: 20px; opacity: 0.9;">You are looking exceptionally amazing today! ✨</p>
             </div>
         """, unsafe_allow_html=True)
