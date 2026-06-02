@@ -7,7 +7,7 @@ st.set_page_config(page_title="Tasnim Ahmad - Project", page_icon="✨", layout=
 # --- Premium Custom CSS (Forces Light Mode) ---
 st.markdown("""
 <style>
-    /* ১. পুরো ব্যাকগ্রাউন্ড এবং হেডার সাদা করা */
+
     .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {
         background-color: #F8FAFC !important;
     }
